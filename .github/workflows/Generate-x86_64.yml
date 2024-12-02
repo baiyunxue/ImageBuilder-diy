@@ -1,10 +1,10 @@
-# This is a basic workflow to help you get started with Actions
+# 这是帮助您开始使用 Actions 的基本工作流程
 
 name: ImageBuilder ImmortalWrt
 
-# Controls when the workflow will run
+# 控制工作流程何时运行
 on:
-  # Allows you to run this workflow manually from the Actions tab
+  # 允许您从“操作”选项卡手动运行此工作流程
   workflow_dispatch:
     inputs:
       release:
@@ -17,47 +17,48 @@ env:
   DOWNLOAD_BASE: https://downloads.immortalwrt.org
   VENDOR: immortalwrt
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# 工作流程运行由一个或多个可以顺序或并行运行的作业组成
 jobs:
-  # This workflow contains a single job called "build"
+  # 该工作流程包含一个名为“build”的作业
   ImageBuilder_ImmortalWrt:
-    # The type of runner that the job will run on
+    # 作业将在其上运行的运行器的类型
     runs-on: ubuntu-22.04
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # 步骤表示将作为作业的一部分执行的一系列任务
     steps:
-      - name: Initialization Environment
+      - name: 正在载入Ubuntu
         run: |
           sudo apt -qq update
-          sudo apt -qq install build-essential libncurses5-dev libncursesw5-dev zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip qemu-utils mkisofs python3-distutils zstd
+          sudo apt -qq install build-essential libncurses5-dev libncursesw5-dev zlib1g-dev gawk git gettext /
+               libssl-dev xsltproc rsync wget unzip qemu-utils mkisofs python3-distutils zstd
           sudo timedatectl set-timezone "Asia/Shanghai"
           echo "DATE=$(TZ=UTC-8 date +%Y%m%d)" >> $GITHUB_ENV
           echo "DATETIME=$(TZ=UTC-8 date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
       
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Checkout
+      # 在 $GITHUB_WORKSPACE 下签出您的存储库，以便您的作业可以访问它
+      - name: 查看进程
         uses: actions/checkout@v4
         with: 
           path: origin
 
-      - name: Download Image Builder
+      - name: 下载镜像生成器
         run: |
           wget $DOWNLOAD_BASE/snapshots/targets/x86/64/$VENDOR-imagebuilder-x86-64.Linux-x86_64.tar.zst
           tar -I zstd -xvf $VENDOR-imagebuilder-x86-64.Linux-x86_64.tar.zst
           rm -rf $VENDOR-imagebuilder-x86-64.Linux-x86_64.tar.zst
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$VENDOR-imagebuilder-x86-64.Linux-x86_64/
       
-      - name: Run Patch and DIY Scripts
+      - name: 运行补丁和 DIY 脚本
         working-directory: ${{ env.VENDOR }}-imagebuilder-x86-64.Linux-x86_64
         run: |
           bash scripts/builder-patch.sh
 
-      - name: Generate Firmware
+      - name: 生成固件
         working-directory: ${{ env.VENDOR }}-imagebuilder-x86-64.Linux-x86_64
         run: |
           bash build.sh
 
-      - name: Upload Firmware to Release
+      - name: 上传固件发布
         if: github.event.inputs.release == 'true'
         uses: svenstaro/upload-release-action@v2
         with:
@@ -68,7 +69,7 @@ jobs:
           tag: ${{ env.VENDOR }}-x86_64-${{ env.DATETIME }}
           overwrite: true
           
-      - name: Delete Old Workflows
+      - name: 删除旧的工作流程
         uses: Mattraks/delete-workflow-runs@v2
         with:
           retain_days: 0
