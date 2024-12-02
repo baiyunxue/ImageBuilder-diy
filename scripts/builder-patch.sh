@@ -5,10 +5,10 @@ echo "Current Path: $PWD"
 
 cd $GITHUB_WORKSPACE/$VENDOR-imagebuilder-x86-64.Linux-x86_64 || exit
 
-# Remove redundant default packages
+# Remove redundant default packages 删除多余的默认包 
 sed -i "/luci-app-cpufreq/d" include/target.mk
 
-# Force opkg to overwrite files
+# Force opkg to overwrite files 强制 opkg 覆盖文件
 sed -i "s/install \$(BUILD_PACKAGES)/install \$(BUILD_PACKAGES) --force-overwrite/" Makefile
 
 # 功能关闭
