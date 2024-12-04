@@ -42,18 +42,18 @@ jobs:
 
       - name: 下载镜像生成器
         run: |
-          wget $DOWNLOAD_BASE/snapshots/targets/mediatek/filogic/$VENDOR-immortalwrt-imagebuilder-mediatek-filogic.Linux-x86_64.tar.zst
-          tar -I zstd -xvf $VENDOR-immortalwrt-imagebuilder-mediatek-filogic.Linux-x86_64.tar.zst
-          rm -rf $VENDOR-immortalwrt-imagebuilder-mediatek-filogic.Linux-x86_64.tar.zst
-          cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$VENDOR-immortalwrt-imagebuilder-mediatek-filogic.Linux-x86_64
+          wget $DOWNLOAD_BASE/snapshots/targets/mediatek/filogic/$VENDOR-imagebuilder-mediatek-filogic.Linux-x86_64.tar.zst
+          tar -I zstd -xvf $VENDOR-imagebuilder-mediatek-filogic.Linux-x86_64.tar.zst
+          rm -rf $VENDOR-imagebuilder-mediatek-filogic.Linux-x86_64.tar.zst
+          cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$VENDOR-imagebuilder-mediatek-filogic.Linux-x86_64
       
       - name: 运行补丁和 DIY 脚本
-        working-directory: ${{ env.VENDOR }}-immortalwrt-imagebuilder-mediatek-filogic.Linux-x86_64
+        working-directory: ${{ env.VENDOR }}-imagebuilder-mediatek-filogic.Linux-x86_64
         run: |
           bash scripts/builder-patch.sh
 
       - name: 生成固件
-        working-directory: ${{ env.VENDOR }}-immortalwrt-imagebuilder-mediatek-filogic.Linux-x86_64
+        working-directory: ${{ env.VENDOR }}-imagebuilder-mediatek-filogic.Linux-x86_64
         run: |
           bash build.sh
 
@@ -63,7 +63,7 @@ jobs:
         with:
           repo_token: ${{ env.GITHUB_TOKEN }}
           file_glob: true
-          file: ${{ env.VENDOR }}-immortalwrt-imagebuilder-mediatek-filogic.Linux-x86_64/bin/targets/mediatek/filogic/*
+          file: ${{ env.VENDOR }}-imagebuilder-mediatek-filogic.Linux-x86_64/bin/targets/mediatek/filogic/*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
           tag: ${{ env.VENDOR }}-mediatek_filogic-${{ env.DATETIME }}
           overwrite: true
