@@ -10,7 +10,7 @@ on:
       release:
         description: 将编译出的镜像上传到 Release
         required: false
-        default: 'false'
+        default: 'true'
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
