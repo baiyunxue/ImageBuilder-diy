@@ -1,10 +1,9 @@
 # 这是帮助您开始使用 Actions 的基本工作流程
+# 控制工作流程何时运行
+# 允许您从“操作”选项卡手动运行此工作流程
 
 name: ImageBuilder MT7981
-
-# 控制工作流程何时运行
 on:
-  # 允许您从“操作”选项卡手动运行此工作流程
   workflow_dispatch:
     inputs:
       release:
@@ -17,14 +16,10 @@ env:
   DOWNLOAD_BASE: https://downloads.immortalwrt.org
   VENDOR: immortalwrt
 
-# 工作流程运行由一个或多个可以顺序或并行运行的作业组成
 jobs:
-  # 该工作流程包含一个名为“build”的作业
   ImageBuilder_ImmortalWrt:
-    # 作业将在其上运行的运行器的类型
     runs-on: ubuntu-22.04
 
-    # 步骤表示将作为作业的一部分执行的一系列任务
     steps:
       - name: 正在载入Ubuntu
         run: |
@@ -34,7 +29,6 @@ jobs:
           echo "DATE=$(TZ=UTC-8 date +%Y%m%d)" >> $GITHUB_ENV
           echo "DATETIME=$(TZ=UTC-8 date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
       
-      # 在 $GITHUB_WORKSPACE 下签出您的存储库，以便您的作业可以访问它
       - name: 查看进程
         uses: actions/checkout@v4
         with: 
