@@ -2,7 +2,7 @@
 # 控制工作流程何时运行
 # 允许您从“操作”选项卡手动运行此工作流程
 
-name: ImageBuilder MT7981
+name: ImageBuilder X86
 on:
   workflow_dispatch:
     inputs:
