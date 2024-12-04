@@ -48,7 +48,7 @@ jobs:
           bash scripts/builder-patch.sh
 
       - name: 生成固件
-        working-directory: ${{ env.VENDOR }}-openwrt/bin/*
+        working-directory: ${{ env.VENDOR }}-openwrt
         run: |
           bash build.sh
 
@@ -58,9 +58,9 @@ jobs:
         with:
           repo_token: ${{ env.GITHUB_TOKEN }}
           file_glob: true
-          file: ${{ env.VENDOR }}-imagebuilder-mediatek-filogic.Linux-x86_64/bin/targets/mediatek/filogic/*
+          file: ${{ env.VENDOR }}-openwrt/bin/targets/X86/*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-          tag: ${{ env.VENDOR }}-mediatek_filogic-${{ env.DATETIME }}
+          tag: ${{ env.VENDOR }}-X86_generic-${{ env.DATETIME }}
           overwrite: true
           
       - name: 删除旧的工作流程
