@@ -36,8 +36,8 @@ jobs:
 
       - name: 下载镜像生成器
         run: |
-          wget $DOWNLOAD_BASE/snapshots/targets/X86/generic/$VENDOR-imagebuilder-x86-generic.Linux-x86_64.tar.zst
-          mv imagebuilder-x86-generic.Linux-x86_64.tar.zst openwrt.tar.zst
+          wget $DOWNLOAD_BASE/snapshots/targets/X86/generic/$VENDOR-immortalwrt-imagebuilder-x86-generic.Linux-x86_64.tar.zst
+          mv immortalwrt-imagebuilder-x86-generic.Linux-x86_64.tar.zst openwrt.tar.zst
           tar -I zstd -xvf $VENDOR-openwrt.tar.zst
           rm -rf $VENDOR-openwrt.tar.zst
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$VENDOR-openwrt
