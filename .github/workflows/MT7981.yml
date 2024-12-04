@@ -29,8 +29,7 @@ jobs:
       - name: 正在载入Ubuntu
         run: |
           sudo apt -qq update
-          sudo apt -qq install build-essential libncurses5-dev libncursesw5-dev zlib1g-dev gawk git gettext /
-               libssl-dev xsltproc rsync wget unzip qemu-utils mkisofs python3-distutils zstd
+          sudo apt -qq install build-essential libncurses5-dev libncursesw5-dev zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip qemu-utils mkisofs python3-distutils zstd
           sudo timedatectl set-timezone "Asia/Shanghai"
           echo "DATE=$(TZ=UTC-8 date +%Y%m%d)" >> $GITHUB_ENV
           echo "DATETIME=$(TZ=UTC-8 date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
