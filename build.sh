@@ -4,7 +4,7 @@
 make info
 
 # 指定要构建的目标映像
-PROFILE="mediatek"
+PROFILE="cmcc_rax3000m"
 
 # 要嵌入映像的软件包列表
 PACKAGES=""
