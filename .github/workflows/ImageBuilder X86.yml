@@ -1,0 +1,70 @@
+# 这是帮助您开始使用 Actions 的基本工作流程
+# 控制工作流程何时运行
+# 允许您从“操作”选项卡手动运行此工作流程
+
+name: ImageBuilder MT7981
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: 将编译出的镜像上传到 Release
+        required: false
+        default: 'true'
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  DOWNLOAD_BASE: https://downloads.immortalwrt.org
+  VENDOR: immortalwrt
+
+jobs:
+  ImageBuilder_ImmortalWrt:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: 正在载入Ubuntu
+        run: |
+          sudo apt -qq update
+          sudo apt -qq install build-essential libncurses5-dev libncursesw5-dev zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip qemu-utils mkisofs python3-distutils zstd
+          sudo timedatectl set-timezone "Asia/Shanghai"
+          echo "DATE=$(TZ=UTC-8 date +%Y%m%d)" >> $GITHUB_ENV
+          echo "DATETIME=$(TZ=UTC-8 date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+      
+      - name: 查看进程
+        uses: actions/checkout@v4
+        with: 
+          path: origin
+
+      - name: 下载镜像生成器
+        run: |
+          wget $DOWNLOAD_BASE/snapshots/targets/X86/generic/$VENDOR-imagebuilder-x86-generic.Linux-x86_64.tar.zst
+          mv imagebuilder-x86-generic.Linux-x86_64.tar.zst openwrt.tar.zst
+          tar -I zstd -xvf $VENDOR-openwrt.tar.zst
+          rm -rf $VENDOR-openwrt.tar.zst
+          cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$VENDOR-imagebuilder-mediatek-filogic.Linux-x86_64
+      
+      - name: 运行补丁和 DIY 脚本
+        working-directory: ${{ env.VENDOR }}-imagebuilder-mediatek-filogic.Linux-x86_64
+        run: |
+          bash scripts/builder-patch.sh
+
+      - name: 生成固件
+        working-directory: ${{ env.VENDOR }}-imagebuilder-mediatek-filogic.Linux-x86_64
+        run: |
+          bash build.sh
+
+      - name: 上传固件发布
+        if: github.event.inputs.release == 'true'
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ env.GITHUB_TOKEN }}
+          file_glob: true
+          file: ${{ env.VENDOR }}-imagebuilder-mediatek-filogic.Linux-x86_64/bin/targets/mediatek/filogic/*
+          asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
+          tag: ${{ env.VENDOR }}-mediatek_filogic-${{ env.DATETIME }}
+          overwrite: true
+          
+      - name: 删除旧的工作流程
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          retain_days: 0
+          keep_minimum_runs: 1
