@@ -1,6 +1,6 @@
 # 这是帮助您开始使用 Actions 的基本工作流程
 
-name: ImageBuilder ImmortalWrt
+name: ImageBuilder MT7981
 
 # 控制工作流程何时运行
 on:
