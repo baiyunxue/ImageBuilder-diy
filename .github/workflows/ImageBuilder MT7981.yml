@@ -37,7 +37,7 @@ jobs:
       - name: 下载镜像生成器
         run: |
           wget $DOWNLOAD_BASE/snapshots/targets/mediatek/filogic/$VENDOR-imagebuilder-mediatek-filogic.Linux-x86_64.tar.zst
-          MV immortalwrt--imagebuilder-mediatek-filogic.Linux-x86_64.tar.zst openwrt.tar.zst
+          MV $GITHUB_WORKSPACE/immortalwrt--imagebuilder-mediatek-filogic.Linux-x86_64.tar.zst openwrt.tar.zst
           tar -I zstd -xvf $VENDOR-openwrt.tar.zst
           rm -rf $VENDOR-openwrt.tar.zst
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$VENDOR-openwrt
