@@ -37,18 +37,17 @@ jobs:
       - name: 下载镜像生成器
         run: |
           wget $DOWNLOAD_BASE/snapshots/targets/X86/generic/$VENDOR-imagebuilder-x86-generic.Linux-x86_64.tar.zst
-          mv immortalwrt-imagebuilder-x86-generic.Linux-x86_64.tar.zst openwrt.tar.zst
-          tar -I zstd -xvf $VENDOR-openwrt.tar.zst
-          rm -rf $VENDOR-openwrt.tar.zst
-          cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$VENDOR-openwrt
+          tar -I zstd -xvf $VENDOR-imagebuilder-x86-generic.Linux-x86_64.tar.zst
+          rm -rf $VENDOR-imagebuilder-x86-generic.Linux-x86_64.tar.zst
+          cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$VENDOR-imagebuilder-x86-generic.Linux-x86_64
       
       - name: 运行补丁和 DIY 脚本
-        working-directory: ${{ env.VENDOR }}-openwrt
+        working-directory: ${{ env.VENDOR }}-imagebuilder-x86-generic.Linux-x86_64
         run: |
           bash scripts/builder-patch.sh
 
       - name: 生成固件
-        working-directory: ${{ env.VENDOR }}-openwrt
+        working-directory: ${{ env.VENDOR }}-imagebuilder-x86-generic.Linux-x86_64
         run: |
           bash build.sh
 
@@ -58,7 +57,7 @@ jobs:
         with:
           repo_token: ${{ env.GITHUB_TOKEN }}
           file_glob: true
-          file: ${{ env.VENDOR }}-openwrt/bin/targets/X86/*
+          file: ${{ env.VENDOR }}-imagebuilder-x86-generic.Linux-x86_64/bin/targets/X86/*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
           tag: ${{ env.VENDOR }}-X86_generic-${{ env.DATETIME }}
           overwrite: true
