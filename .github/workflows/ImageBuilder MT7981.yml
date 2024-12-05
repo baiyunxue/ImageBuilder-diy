@@ -42,10 +42,10 @@ jobs:
           rm -rf $VENDOR-openwrt.tar.zst
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$VENDOR-openwrt
       
-      - name: 运行补丁和 DIY 脚本
-        working-directory: ${{ env.VENDOR }}-openwrt
-        run: |
-          bash scripts/builder-patch.sh
+      #- name: 运行补丁和 DIY 脚本
+       # working-directory: ${{ env.VENDOR }}-openwrt
+        #run: |
+          #bash scripts/builder-patch.sh
 
       - name: 生成固件
         working-directory: ${{ env.VENDOR }}-openwrt
